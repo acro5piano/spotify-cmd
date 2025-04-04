@@ -1,22 +1,16 @@
 import SpotifyWebApi from 'spotify-web-api-node'
 import fs from 'fs'
 import path from 'path'
-import { fileURLToPath } from 'url'
 import os from 'os'
 import { createServer } from 'http'
 import { randomBytes } from 'crypto'
 import { execSync } from 'child_process'
-
-// Get the directory name
-const __dirname = path.dirname(fileURLToPath(import.meta.url))
+import readline from 'readline'
 
 // Path to store tokens in home directory for portability
 const TOKEN_PATH = path.join(os.homedir(), '.spotify-tokens.json')
 
-// Spotify API credentials
-// These should be set in a .env file
-const CLIENT_ID = process.env.SPOTIFY_CLIENT_ID
-const CLIENT_SECRET = process.env.SPOTIFY_CLIENT_SECRET
+// Spotify API redirect URI
 const REDIRECT_URI = 'http://localhost:8888/callback'
 
 // Scopes required for the application
@@ -96,24 +90,27 @@ async function refreshAccessToken(
 /**
  * Perform the authorization flow
  */
-async function authorizeUser(): Promise<{
+async function authorizeUser(
+  clientId: string,
+  clientSecret: string,
+): Promise<{
   accessToken: string
   refreshToken: string
   expiresAt: number
 }> {
   return new Promise((resolve, reject) => {
-    if (!CLIENT_ID || !CLIENT_SECRET) {
+    if (!clientId || !clientSecret) {
       reject(
         new Error(
-          'Missing Spotify API credentials. Please set SPOTIFY_CLIENT_ID and SPOTIFY_CLIENT_SECRET in your .env file.',
+          'Missing Spotify API credentials. Please provide your Spotify Client ID and Client Secret.',
         ),
       )
       return
     }
 
     const spotifyApi = new SpotifyWebApi({
-      clientId: CLIENT_ID,
-      clientSecret: CLIENT_SECRET,
+      clientId,
+      clientSecret,
       redirectUri: REDIRECT_URI,
     })
 
@@ -208,21 +205,73 @@ async function authorizeUser(): Promise<{
 }
 
 /**
+ * Load credentials from file or environment variables
+ */
+async function getCredentials(): Promise<{
+  clientId: string
+  clientSecret: string
+}> {
+  // Then try environment variables
+  const clientId = process.env.SPOTIFY_CLIENT_ID
+  const clientSecret = process.env.SPOTIFY_CLIENT_SECRET
+
+  if (clientId && clientSecret) {
+    return { clientId, clientSecret }
+  }
+
+  // If still not available, prompt the user
+  return promptForCredentials()
+}
+
+/**
+ * Prompt user for Spotify API credentials
+ */
+async function promptForCredentials(): Promise<{
+  clientId: string
+  clientSecret: string
+}> {
+  console.log('\nSpotify API credentials are required for authentication.')
+  console.log('You can get these from https://developer.spotify.com/dashboard')
+
+  const rl = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout,
+  })
+
+  const clientId = await new Promise<string>((resolve) => {
+    rl.question('Enter your Spotify Client ID: ', (answer) => {
+      resolve(answer.trim())
+    })
+  })
+
+  const clientSecret = await new Promise<string>((resolve) => {
+    rl.question('Enter your Spotify Client Secret: ', (answer) => {
+      resolve(answer.trim())
+    })
+  })
+
+  rl.close()
+
+  if (!clientId || !clientSecret) {
+    throw new Error('Client ID and Client Secret are required.')
+  }
+
+  return { clientId, clientSecret }
+}
+
+/**
  * Set up authentication with Spotify
  * @param forceAuth Force a new authentication flow
  * @returns A configured SpotifyWebApi instance
  */
 export async function setupAuth(forceAuth = false): Promise<SpotifyWebApi> {
-  if (!CLIENT_ID || !CLIENT_SECRET) {
-    throw new Error(
-      'Missing Spotify API credentials. Please set SPOTIFY_CLIENT_ID and SPOTIFY_CLIENT_SECRET in your .env file.',
-    )
-  }
+  // Get credentials (from env vars, or user prompt)
+  const { clientId, clientSecret } = await getCredentials()
 
   // Create a new API instance
   const spotifyApi = new SpotifyWebApi({
-    clientId: CLIENT_ID,
-    clientSecret: CLIENT_SECRET,
+    clientId,
+    clientSecret,
     redirectUri: REDIRECT_URI,
   })
 
@@ -243,7 +292,7 @@ export async function setupAuth(forceAuth = false): Promise<SpotifyWebApi> {
     return spotifyApi
   } else {
     // Perform the authorization flow
-    const newTokens = await authorizeUser()
+    const newTokens = await authorizeUser(clientId, clientSecret)
 
     // Save the tokens
     saveTokens(newTokens)
