@@ -35,6 +35,8 @@ program
     '-d, --device <device name>',
     'Specify device (default: find Echo Dot)',
   )
+  .option('-r, --repeat <mode>', 'Set repeat mode (off/track/context)')
+  .option('-s, --shuffle <state>', 'Set shuffle mode (on/off)')
   .action(async (options) => {
     try {
       // Ensure we're authenticated
@@ -65,6 +67,37 @@ program
       } else {
         await resumePlayback(spotifyApi, deviceId)
         console.log('Resuming playback')
+      }
+
+      // Set repeat mode if specified
+      if (options.repeat) {
+        // Validate the repeat mode
+        if (!options.repeat.match(/^(off|track|context)$/i)) {
+          console.error(
+            'Invalid repeat mode. Must be one of: off, track, context',
+          )
+          process.exit(1)
+        }
+
+        const repeatMode = options.repeat.toLowerCase() as
+          | 'off'
+          | 'track'
+          | 'context'
+        await setRepeatMode(spotifyApi, repeatMode, deviceId)
+        console.log(`Repeat mode set to ${repeatMode}`)
+      }
+
+      // Set shuffle mode if specified
+      if (options.shuffle) {
+        // Validate the shuffle state
+        if (!options.shuffle.match(/^(on|off)$/i)) {
+          console.error('Invalid shuffle state. Must be "on" or "off"')
+          process.exit(1)
+        }
+
+        const shuffleState = options.shuffle.toLowerCase() === 'on'
+        await toggleShuffle(spotifyApi, shuffleState, deviceId)
+        console.log(`Shuffle mode ${shuffleState ? 'enabled' : 'disabled'}`)
       }
     } catch (error) {
       console.error(

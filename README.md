@@ -7,7 +7,7 @@ Control Spotify from the command line.
 - Play specific playlists or tracks
 - Control playback (play, pause, skip, etc.)
 - Adjust volume
-- Toggle shuffle and repeat modes
+- Toggle shuffle and repeat modes (including directly when playing tracks/playlists)
 - View current playback status
 - Automatically find and play on Echo Dot devices
 
@@ -65,6 +65,12 @@ spotify-cmd play --playlist 0at3rmPoI58LhHtWABBhFY
 # Play a specific track
 spotify-cmd play --track 4iV5W9uYEdYUVa79Axb7Rh
 
+# Play a track with repeat mode
+spotify-cmd play --track 4iV5W9uYEdYUVa79Axb7Rh --repeat context
+
+# Play a playlist with shuffle enabled
+spotify-cmd play --playlist 0at3rmPoI58LhHtWABBhFY --shuffle on
+
 # Pause playback
 spotify-cmd pause
 
@@ -98,6 +104,12 @@ You can specify a different device using the `--device` option with the play com
 
 ```bash
 spotify-cmd play --playlist 0at3rmPoI58LhHtWABBhFY --device "Kitchen Speaker"
+```
+
+You can also combine multiple options:
+
+```bash
+spotify-cmd play --track 4iV5W9uYEdYUVa79Axb7Rh --device "Living Room" --repeat track --shuffle on
 ```
 
 ## Contribute
