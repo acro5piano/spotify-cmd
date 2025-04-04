@@ -1,0 +1,24 @@
+{
+  "name": "spotify-cmd",
+  "module": "src/main.ts",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "start": "bun run src/main.ts",
+    "build": "bun build src/main.ts --outdir ./dist --target node",
+    "setup": "bun run src/main.ts setup"
+  },
+  "devDependencies": {
+    "@types/bun": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^5"
+  },
+  "dependencies": {
+    "@commander-js/extra-typings": "^13.1.0",
+    "@types/spotify-web-api-node": "^5.0.11",
+    "commander": "^13.1.0",
+    "dotenv": "^16.4.7",
+    "spotify-web-api-node": "^5.0.2"
+  }
+}
