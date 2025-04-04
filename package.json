@@ -8,17 +8,15 @@
     "build": "bun build src/main.ts --outdir ./dist --target node",
     "setup": "bun run src/main.ts setup"
   },
-  "devDependencies": {
-    "@types/bun": "latest"
-  },
-  "peerDependencies": {
-    "typescript": "^5"
-  },
   "dependencies": {
     "@commander-js/extra-typings": "^13.1.0",
-    "@types/spotify-web-api-node": "^5.0.11",
     "commander": "^13.1.0",
     "dotenv": "^16.4.7",
     "spotify-web-api-node": "^5.0.2"
+  },
+  "devDependencies": {
+    "@types/bun": "latest",
+    "@types/spotify-web-api-node": "^5.0.11",
+    "typescript": "^5"
   }
 }
