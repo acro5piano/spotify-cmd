@@ -1,5 +1,5 @@
 <div align=center>
-<img src=https://github.com/user-attachments/assets/d8b757eb-9920-462b-838c-9979af38ab8f width=380>
+<img src=https://github.com/user-attachments/assets/d8b757eb-9920-462b-838c-9979af38ab8f width=280>
 </div>
 
 # spotify-cmd
