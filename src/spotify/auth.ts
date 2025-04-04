@@ -2,6 +2,7 @@ import SpotifyWebApi from 'spotify-web-api-node'
 import fs from 'fs'
 import path from 'path'
 import { fileURLToPath } from 'url'
+import os from 'os'
 import { createServer } from 'http'
 import { randomBytes } from 'crypto'
 import { execSync } from 'child_process'
@@ -9,8 +10,8 @@ import { execSync } from 'child_process'
 // Get the directory name
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
-// Path to store tokens
-const TOKEN_PATH = path.join(__dirname, '../../.spotify-tokens.json')
+// Path to store tokens in home directory for portability
+const TOKEN_PATH = path.join(os.homedir(), '.spotify-tokens.json')
 
 // Spotify API credentials
 // These should be set in a .env file
