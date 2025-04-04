@@ -265,13 +265,10 @@ async function promptForCredentials(): Promise<{
  * @returns A configured SpotifyWebApi instance
  */
 export async function setupAuth(forceAuth = false): Promise<SpotifyWebApi> {
-  // Get credentials (from env vars, or user prompt)
-  const { clientId, clientSecret } = await getCredentials()
-
   // Create a new API instance
   const spotifyApi = new SpotifyWebApi({
-    clientId,
-    clientSecret,
+    clientId: undefined,
+    clientSecret: undefined,
     redirectUri: REDIRECT_URI,
   })
 
@@ -291,7 +288,9 @@ export async function setupAuth(forceAuth = false): Promise<SpotifyWebApi> {
 
     return spotifyApi
   } else {
+    const { clientId, clientSecret } = await getCredentials()
     // Perform the authorization flow
+    // Get credentials (from env vars, or user prompt)
     const newTokens = await authorizeUser(clientId, clientSecret)
 
     // Save the tokens

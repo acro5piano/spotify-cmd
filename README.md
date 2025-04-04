@@ -49,8 +49,6 @@ chmod +x ~/.local/bin/spotify-cmd
 4. Setup
 
 ```bash
-export SPOTIFY_CLIENT_ID=your_client_id_here
-export SPOTIFY_CLIENT_SECRET=your_client_secret_here
 spotify-cmd setup
 ```
 
@@ -62,34 +60,34 @@ This will open a browser window for authentication. After authenticating, you ca
 
 ```bash
 # Play a specific playlist
-bun run start play --playlist 0at3rmPoI58LhHtWABBhFY
+spotify-cmd play --playlist 0at3rmPoI58LhHtWABBhFY
 
 # Play a specific track
-bun run start play --track 4iV5W9uYEdYUVa79Axb7Rh
+spotify-cmd play --track 4iV5W9uYEdYUVa79Axb7Rh
 
 # Pause playback
-bun run start pause
+spotify-cmd pause
 
 # Resume playback
-bun run start resume
+spotify-cmd resume
 
 # Skip to next track
-bun run start next
+spotify-cmd next
 
 # Skip to previous track
-bun run start prev
+spotify-cmd prev
 
 # Set volume (0-100)
-bun run start volume 50
+spotify-cmd volume 50
 
 # Show current playback status
-bun run start status
+spotify-cmd status
 
 # Toggle shuffle mode
-bun run start shuffle on  # or 'off'
+spotify-cmd shuffle on  # or 'off'
 
 # Set repeat mode
-bun run start repeat off  # or 'track' or 'context'
+spotify-cmd repeat off  # or 'track' or 'context'
 ```
 
 ### Device Selection
@@ -99,7 +97,7 @@ By default, the application will look for a device with "Echo Dot" in its name. 
 You can specify a different device using the `--device` option with the play command:
 
 ```bash
-bun run start play --playlist 0at3rmPoI58LhHtWABBhFY --device "Kitchen Speaker"
+spotify-cmd play --playlist 0at3rmPoI58LhHtWABBhFY --device "Kitchen Speaker"
 ```
 
 ## Contribute
