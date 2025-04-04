@@ -28,11 +28,16 @@ git clone https://github.com/acro5piano/spotify-cmd.git
 cd spotify-cmd
 ```
 
-2. Install dependencies:
+2. Build and install:
 
 ```bash
 bun install
+bun run build
+cp ./dist/main.js ~/.local/bin/spotify-cmd
+chmod +x ~/.local/bin/spotify-cmd
 ```
+
+> Make sure `~/.local/bin/spotify-cmd` is in `$PATH`
 
 3. Create a Spotify application:
 
@@ -41,23 +46,12 @@ bun install
 - Add `http://localhost:8888/callback` as a Redirect URI
 - Note your Client ID and Client Secret
 
-4. Create a `.env` file:
+4. Setup
 
 ```bash
-cp .env.example .env
-```
-
-5. Edit the `.env` file and add your Spotify credentials:
-
-```
-SPOTIFY_CLIENT_ID=your_client_id_here
-SPOTIFY_CLIENT_SECRET=your_client_secret_here
-```
-
-6. Run the setup command to authenticate with Spotify:
-
-```bash
-bun run setup
+export SPOTIFY_CLIENT_ID=your_client_id_here
+export SPOTIFY_CLIENT_SECRET=your_client_secret_here
+spotify-cmd setup
 ```
 
 This will open a browser window for authentication. After authenticating, you can close the browser.
@@ -108,15 +102,9 @@ You can specify a different device using the `--device` option with the play com
 bun run start play --playlist 0at3rmPoI58LhHtWABBhFY --device "Kitchen Speaker"
 ```
 
-## Building
+## Contribute
 
-To build a standalone executable:
-
-```bash
-bun run build
-```
-
-This will create a build in the `dist` directory.
+See [DEVELOPMENT.md](./DEVELOPMENT.md).
 
 ## License
 
