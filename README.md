@@ -37,7 +37,7 @@ cp ./dist/main.js ~/.local/bin/spotify-cmd
 chmod +x ~/.local/bin/spotify-cmd
 ```
 
-> Make sure `~/.local/bin/spotify-cmd` is in `$PATH`
+> Make sure `~/.local/bin` is in `$PATH`
 
 3. Create a Spotify application:
 
