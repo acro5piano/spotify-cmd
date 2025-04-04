@@ -104,6 +104,8 @@ spotify-cmd play --playlist 0at3rmPoI58LhHtWABBhFY --device "Kitchen Speaker"
 
 See [DEVELOPMENT.md](./DEVELOPMENT.md).
 
+Most of code is written using Cline in Vibe coding way. If you are curious about it, please read the initial prompt [HERE](https://github.com/acro5piano/spotify-cmd/blob/main/PROMPT.md)
+
 ## License
 
 MIT
