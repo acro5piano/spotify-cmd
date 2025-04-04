@@ -7,8 +7,8 @@ import { randomBytes } from 'crypto'
 import { execSync } from 'child_process'
 import readline from 'readline'
 
-// Path to store tokens in home directory for portability
-const TOKEN_PATH = path.join(os.homedir(), '.spotify-tokens.json')
+// Path to store configuration in home directory for portability
+const CONFIG_PATH = path.join(os.homedir(), '.spotify-config.json')
 
 // Spotify API redirect URI
 const REDIRECT_URI = 'http://localhost:8888/callback'
@@ -28,31 +28,40 @@ function generateRandomString(length: number): string {
 }
 
 /**
- * Save tokens to a file
+ * Configuration type definition
  */
-function saveTokens(tokens: {
-  accessToken: string
-  refreshToken: string
-  expiresAt: number
-}): void {
-  fs.writeFileSync(TOKEN_PATH, JSON.stringify(tokens, null, 2))
+type SpotifyConfig = {
+  clientId?: string
+  clientSecret?: string
+  accessToken?: string
+  refreshToken?: string
+  expiresAt?: number
 }
 
 /**
- * Load tokens from file
+ * Save configuration to file
  */
-function loadTokens(): {
-  accessToken: string
-  refreshToken: string
-  expiresAt: number
-} | null {
+function saveConfig(config: SpotifyConfig): void {
+  // Load existing config first to avoid overwriting other fields
+  const existingConfig = loadConfig() || {}
+  
+  // Merge with new config
+  const updatedConfig = { ...existingConfig, ...config }
+  
+  fs.writeFileSync(CONFIG_PATH, JSON.stringify(updatedConfig, null, 2))
+}
+
+/**
+ * Load configuration from file
+ */
+function loadConfig(): SpotifyConfig | null {
   try {
-    if (fs.existsSync(TOKEN_PATH)) {
-      const data = fs.readFileSync(TOKEN_PATH, 'utf8')
+    if (fs.existsSync(CONFIG_PATH)) {
+      const data = fs.readFileSync(CONFIG_PATH, 'utf8')
       return JSON.parse(data)
     }
   } catch (error) {
-    console.error('Error loading tokens:', error)
+    console.error('Error loading config:', error)
   }
   return null
 }
@@ -64,6 +73,20 @@ async function refreshAccessToken(
   spotifyApi: SpotifyWebApi,
 ): Promise<SpotifyWebApi> {
   try {
+    // Make sure we have client credentials set
+    const config = loadConfig() || {}
+    
+    if (!config.clientId || !config.clientSecret) {
+      const credentials = await promptForCredentials()
+      config.clientId = credentials.clientId
+      config.clientSecret = credentials.clientSecret
+      saveConfig(config)
+    }
+
+    // Set the credentials on the API instance
+    spotifyApi.setClientId(config.clientId)
+    spotifyApi.setClientSecret(config.clientSecret)
+
     const data = await spotifyApi.refreshAccessToken()
     const accessToken = data.body.access_token
 
@@ -71,7 +94,7 @@ async function refreshAccessToken(
     const expiresAt = Date.now() + data.body.expires_in * 1000 - 60000
 
     // Save the new tokens
-    saveTokens({
+    saveConfig({
       accessToken,
       refreshToken: spotifyApi.getRefreshToken() || '',
       expiresAt,
@@ -205,22 +228,43 @@ async function authorizeUser(
 }
 
 /**
- * Load credentials from file or environment variables
+ * Get credentials from config file, environment variables, or prompt
  */
 async function getCredentials(): Promise<{
   clientId: string
   clientSecret: string
 }> {
+  // First try config file
+  const config = loadConfig()
+  if (config?.clientId && config?.clientSecret) {
+    return {
+      clientId: config.clientId,
+      clientSecret: config.clientSecret,
+    }
+  }
+
   // Then try environment variables
   const clientId = process.env.SPOTIFY_CLIENT_ID
   const clientSecret = process.env.SPOTIFY_CLIENT_SECRET
 
   if (clientId && clientSecret) {
+    // Save to config file for future use
+    saveConfig({ clientId, clientSecret })
+    console.log(`Credentials saved to ${CONFIG_PATH}`)
     return { clientId, clientSecret }
   }
 
   // If still not available, prompt the user
-  return promptForCredentials()
+  const credentials = await promptForCredentials()
+
+  // Save the entered credentials to config file
+  saveConfig({ 
+    clientId: credentials.clientId, 
+    clientSecret: credentials.clientSecret 
+  })
+  console.log(`Credentials saved to ${CONFIG_PATH}`)
+
+  return credentials
 }
 
 /**
@@ -265,36 +309,39 @@ async function promptForCredentials(): Promise<{
  * @returns A configured SpotifyWebApi instance
  */
 export async function setupAuth(forceAuth = false): Promise<SpotifyWebApi> {
-  // Create a new API instance
+  // Get credentials first
+  const { clientId, clientSecret } = await getCredentials()
+
+  // Create a new API instance with credentials
   const spotifyApi = new SpotifyWebApi({
-    clientId: undefined,
-    clientSecret: undefined,
+    clientId,
+    clientSecret,
     redirectUri: REDIRECT_URI,
   })
 
   // Check if we have stored tokens
-  const tokens = loadTokens()
+  const config = loadConfig()
 
-  if (!forceAuth && tokens && tokens.refreshToken) {
+  if (!forceAuth && config?.refreshToken) {
     // Set the tokens on the API instance
-    spotifyApi.setAccessToken(tokens.accessToken)
-    spotifyApi.setRefreshToken(tokens.refreshToken)
+    if (config.accessToken) spotifyApi.setAccessToken(config.accessToken)
+    spotifyApi.setRefreshToken(config.refreshToken)
 
     // Check if the access token is expired
-    if (Date.now() > tokens.expiresAt) {
+    if (!config.expiresAt || Date.now() > config.expiresAt) {
       // Refresh the access token
       return refreshAccessToken(spotifyApi)
     }
 
     return spotifyApi
   } else {
-    const { clientId, clientSecret } = await getCredentials()
     // Perform the authorization flow
-    // Get credentials (from env vars, or user prompt)
     const newTokens = await authorizeUser(clientId, clientSecret)
 
-    // Save the tokens
-    saveTokens(newTokens)
+    // Save the tokens along with credentials
+    saveConfig({
+      ...newTokens
+    })
 
     // Set the tokens on the API instance
     spotifyApi.setAccessToken(newTokens.accessToken)
