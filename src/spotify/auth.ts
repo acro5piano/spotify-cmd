@@ -44,10 +44,10 @@ type SpotifyConfig = {
 function saveConfig(config: SpotifyConfig): void {
   // Load existing config first to avoid overwriting other fields
   const existingConfig = loadConfig() || {}
-  
+
   // Merge with new config
   const updatedConfig = { ...existingConfig, ...config }
-  
+
   fs.writeFileSync(CONFIG_PATH, JSON.stringify(updatedConfig, null, 2))
 }
 
@@ -75,7 +75,7 @@ async function refreshAccessToken(
   try {
     // Make sure we have client credentials set
     const config = loadConfig() || {}
-    
+
     if (!config.clientId || !config.clientSecret) {
       const credentials = await promptForCredentials()
       config.clientId = credentials.clientId
@@ -258,9 +258,9 @@ async function getCredentials(): Promise<{
   const credentials = await promptForCredentials()
 
   // Save the entered credentials to config file
-  saveConfig({ 
-    clientId: credentials.clientId, 
-    clientSecret: credentials.clientSecret 
+  saveConfig({
+    clientId: credentials.clientId,
+    clientSecret: credentials.clientSecret,
   })
   console.log(`Credentials saved to ${CONFIG_PATH}`)
 
@@ -340,7 +340,7 @@ export async function setupAuth(forceAuth = false): Promise<SpotifyWebApi> {
 
     // Save the tokens along with credentials
     saveConfig({
-      ...newTokens
+      ...newTokens,
     })
 
     // Set the tokens on the API instance

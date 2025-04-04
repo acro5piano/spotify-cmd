@@ -6,7 +6,9 @@
   "scripts": {
     "start": "bun run src/main.ts",
     "build": "bun build src/main.ts --outdir ./dist --target node",
-    "setup": "bun run src/main.ts setup"
+    "setup": "bun run src/main.ts setup",
+    "test": "bun test",
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "@commander-js/extra-typings": "^13.1.0",
