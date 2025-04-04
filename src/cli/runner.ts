@@ -21,7 +21,7 @@ dotenv.config()
 
 // Initialize the CLI program
 const program = new Command()
-  .name('spotify-cmd')
+  .name('spotify')
   .description('Control Spotify from the command line')
   .version('1.0.0')
 

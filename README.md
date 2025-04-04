@@ -33,8 +33,8 @@ cd spotify-cmd
 ```bash
 bun install
 bun run build
-cp ./dist/main.js ~/.local/bin/spotify-cmd
-chmod +x ~/.local/bin/spotify-cmd
+cp ./dist/main.js ~/.local/bin/spotify
+chmod +x ~/.local/bin/spotify
 ```
 
 > Make sure `~/.local/bin` is in `$PATH`
@@ -49,7 +49,7 @@ chmod +x ~/.local/bin/spotify-cmd
 4. Setup
 
 ```bash
-spotify-cmd setup
+spotify setup
 ```
 
 This will open a browser window for authentication. After authenticating, you can close the browser.
@@ -60,40 +60,40 @@ This will open a browser window for authentication. After authenticating, you ca
 
 ```bash
 # Play a specific playlist
-spotify-cmd play --playlist 0at3rmPoI58LhHtWABBhFY
+spotify play --playlist 0at3rmPoI58LhHtWABBhFY
 
 # Play a specific track
-spotify-cmd play --track 4iV5W9uYEdYUVa79Axb7Rh
+spotify play --track 4iV5W9uYEdYUVa79Axb7Rh
 
 # Play a track with repeat mode
-spotify-cmd play --track 4iV5W9uYEdYUVa79Axb7Rh --repeat context
+spotify play --track 4iV5W9uYEdYUVa79Axb7Rh --repeat context
 
 # Play a playlist with shuffle enabled
-spotify-cmd play --playlist 0at3rmPoI58LhHtWABBhFY --shuffle on
+spotify play --playlist 0at3rmPoI58LhHtWABBhFY --shuffle on
 
 # Pause playback
-spotify-cmd pause
+spotify pause
 
 # Resume playback
-spotify-cmd resume
+spotify resume
 
 # Skip to next track
-spotify-cmd next
+spotify next
 
 # Skip to previous track
-spotify-cmd prev
+spotify prev
 
 # Set volume (0-100)
-spotify-cmd volume 50
+spotify volume 50
 
 # Show current playback status
-spotify-cmd status
+spotify status
 
 # Toggle shuffle mode
-spotify-cmd shuffle on  # or 'off'
+spotify shuffle on  # or 'off'
 
 # Set repeat mode
-spotify-cmd repeat off  # or 'track' or 'context'
+spotify repeat off  # or 'track' or 'context'
 ```
 
 ### Device Selection
@@ -103,13 +103,13 @@ By default, the application will look for a device with "Echo Dot" in its name. 
 You can specify a different device using the `--device` option with the play command:
 
 ```bash
-spotify-cmd play --playlist 0at3rmPoI58LhHtWABBhFY --device "Kitchen Speaker"
+spotify play --playlist 0at3rmPoI58LhHtWABBhFY --device "Kitchen Speaker"
 ```
 
 You can also combine multiple options:
 
 ```bash
-spotify-cmd play --track 4iV5W9uYEdYUVa79Axb7Rh --device "Living Room" --repeat track --shuffle on
+spotify play --track 4iV5W9uYEdYUVa79Axb7Rh --device "Living Room" --repeat track --shuffle on
 ```
 
 ## Contribute
