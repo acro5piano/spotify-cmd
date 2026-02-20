@@ -100,6 +100,19 @@ spotify shuffle on  # or 'off'
 
 # Set repeat mode
 spotify repeat off  # or 'track' or 'context'
+
+# Search songs & playlists
+spotify search 'frieren'
+1. Frieren the Slayer - Evan Call (TVアニメ『葬送のフリーレン』Original Soundtrack) [7x3c2cBpqNoObprhoOkvHN]
+2. Journey of a Lifetime ~ Frieren Main Theme - Evan Call (TVアニメ『葬送のフリーレン』Original Soundtrack) [3mkqBfYxkgjmjfkGTXogDG]
+3. Zoltraak - Evan Call (TVアニメ『葬送のフリーレン』Original Soundtrack〜Pre-release〜) [30lXCrnKs5TJJOuSVwiQn1]
+4. 勇者 - YOASOBI (勇者) [4LjIQmt1t6NjpM0tpttzjo]
+5. Journey of a Lifetime ~ Frieren Main Theme - Evan Call (TVアニメ『葬送のフリーレン』Original Soundtrack〜Pre-release〜) [7JHDA345OE7gZwz78itqBC]
+6. Frieren Piano Ending (Anytime Anywhere) - milet, maats (Frieren (Piano Edition) - Original Soundtrack 葬送のフリーレン) [7k2a6WechP2kYVHaEKwmYD]
+7. Frieren: Beyond Journey's End Episode 12 OST 改 - yanwei yang (Frieren: Beyond Journey's End Episode 12 OST 改) [5UGAwFpFkQ0UIcsk4mAoSD]
+8. 勇者 - YOASOBI (THE BOOK 3) [0YTM7bCx451c6LQbkddy4Q]
+9. Zoltraak (From "Frieren") - Piano - Felt Version - maats, Evan Call (Frieren - Piano (Original Soundtrack 葬送のフリーレン) Felt Version) [6K1NCIKLL76aZhfc75r14S]
+10. Time Flows Ever Onward (From "Frieren") - Piano - Felt Version - maats, Evan Call (Frieren - Piano (Original Soundtrack 葬送のフリーレン) Felt Version) [2gjnCeg70wXq282LCpW746]
 ```
 
 ### Device Selection

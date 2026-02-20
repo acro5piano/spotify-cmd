@@ -1,5 +1,32 @@
 import SpotifyWebApi from 'spotify-web-api-node'
 
+export function formatSearchResults(
+  type: 'track' | 'playlist',
+  results: SpotifyApi.SearchResponse,
+): string {
+  if (type === 'track') {
+    const tracks = results.tracks?.items
+    if (!tracks || tracks.length === 0) return 'No tracks found.'
+    return tracks
+      .map((t, i) => {
+        const artists = t.artists.map((a) => a.name).join(', ')
+        return `${i + 1}. ${t.name} - ${artists} (${t.album.name}) [${t.id}]`
+      })
+      .join('\n')
+  }
+
+  const playlists = results.playlists?.items?.filter(
+    (p): p is SpotifyApi.PlaylistObjectSimplified => p !== null,
+  )
+  if (!playlists || playlists.length === 0) return 'No playlists found.'
+  return playlists
+    .map((p, i) => {
+      const owner = p.owner.display_name ?? p.owner.id
+      return `${i + 1}. ${p.name} by ${owner} (${p.tracks.total} tracks) [${p.id}]`
+    })
+    .join('\n')
+}
+
 /**
  * Format the current playback status for display
  * @param playbackState The current playback state from Spotify API

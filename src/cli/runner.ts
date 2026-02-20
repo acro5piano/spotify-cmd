@@ -14,7 +14,8 @@ import {
   setRepeatMode,
 } from '../spotify/playback'
 import { findEchoDevice } from '../spotify/devices'
-import { formatPlaybackStatus } from './output'
+import { formatPlaybackStatus, formatSearchResults } from './output'
+import { searchTracks, searchPlaylists } from '../spotify/search'
 
 // Load environment variables
 dotenv.config()
@@ -308,6 +309,39 @@ program
     } catch (error) {
       console.error(
         'Error setting up authentication:',
+        error instanceof Error ? error.message : String(error),
+      )
+      process.exit(1)
+    }
+  })
+
+// Search command
+program
+  .command('search')
+  .description('Search for tracks or playlists on Spotify')
+  .argument('<query>', 'Search query')
+  .option('-t, --type <type>', 'Search type: track or playlist', 'track')
+  .option('-l, --limit <n>', 'Max results', '10')
+  .action(async (query, options) => {
+    try {
+      const type = options.type as 'track' | 'playlist'
+      if (type !== 'track' && type !== 'playlist') {
+        console.error('Invalid search type. Must be "track" or "playlist"')
+        process.exit(1)
+      }
+
+      const limit = parseInt(options.limit, 10)
+      const spotifyApi = await setupAuth()
+
+      const results =
+        type === 'track'
+          ? await searchTracks(spotifyApi, query, limit)
+          : await searchPlaylists(spotifyApi, query, limit)
+
+      console.log(formatSearchResults(type, results))
+    } catch (error) {
+      console.error(
+        'Error searching:',
         error instanceof Error ? error.message : String(error),
       )
       process.exit(1)
