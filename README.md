@@ -27,14 +27,21 @@ Control Spotify from the command line.
 
 ### Setup
 
-1. Clone the repository:
+1. Create a Spotify application:
+
+- Go to [Spotify Developer Dashboard](https://developer.spotify.com/dashboard)
+- Create a new application
+- Add `http://127.0.0.1:8888/callback` as a Redirect URI
+- Note your Client ID and Client Secret
+
+2. Clone the repository:
 
 ```bash
 git clone https://github.com/acro5piano/spotify-cmd.git
 cd spotify-cmd
 ```
 
-2. Build and install:
+3. Build and install:
 
 ```bash
 bun install
@@ -45,20 +52,15 @@ chmod +x ~/.local/bin/spotify
 
 > Make sure `~/.local/bin` is in `$PATH`
 
-3. Create a Spotify application:
-
-- Go to [Spotify Developer Dashboard](https://developer.spotify.com/dashboard)
-- Create a new application
-- Add `http://localhost:8888/callback` as a Redirect URI
-- Note your Client ID and Client Secret
-
 4. Setup
 
 ```bash
 spotify setup
 ```
 
-This will open a browser window for authentication. After authenticating, you can close the browser.
+Paste `Client ID` and `Client secret` from the app setting which is created in step 1.
+
+Then a browser window will be launched for authentication. After authenticating, you are ready to go.
 
 ## Usage
 
