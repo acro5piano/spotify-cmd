@@ -1,19 +1,18 @@
 {
   "lockfileVersion": 1,
+  "configVersion": 0,
   "workspaces": {
     "": {
       "name": "spotify-cmd",
       "dependencies": {
         "@commander-js/extra-typings": "^13.1.0",
-        "@types/spotify-web-api-node": "^5.0.11",
         "commander": "^13.1.0",
         "dotenv": "^16.4.7",
         "spotify-web-api-node": "^5.0.2",
       },
       "devDependencies": {
         "@types/bun": "latest",
-      },
-      "peerDependencies": {
+        "@types/spotify-web-api-node": "^5.0.11",
         "typescript": "^5",
       },
     },
