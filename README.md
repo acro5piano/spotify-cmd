@@ -52,6 +52,10 @@ chmod +x ~/.local/bin/spotify
 
 > Make sure `~/.local/bin` is in `$PATH`
 
+Alternatively, you can download the pre-built file from the GitHub release:
+
+https://github.com/acro5piano/spotify-cmd/releases/download/v1.0.0/spotify
+
 4. Setup
 
 ```bash
