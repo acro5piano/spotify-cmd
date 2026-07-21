@@ -17,7 +17,7 @@ bun install
 
 - Go to [Spotify Developer Dashboard](https://developer.spotify.com/dashboard)
 - Create a new application
-- Add `http://localhost:8888/callback` as a Redirect URI
+- Add `http://127.0.0.1:8888/callback` as a Redirect URI
 - Note your Client ID and Client Secret
 
 4. Create a `.env` file:

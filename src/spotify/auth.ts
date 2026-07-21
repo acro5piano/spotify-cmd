@@ -11,7 +11,7 @@ import readline from 'readline'
 const CONFIG_PATH = path.join(os.homedir(), '.spotify-config.json')
 
 // Spotify API redirect URI
-const REDIRECT_URI = 'http://localhost:8888/callback'
+const REDIRECT_URI = 'http://127.0.0.1:8888/callback'
 
 // Scopes required for the application
 const SCOPES = [
