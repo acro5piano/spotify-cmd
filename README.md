@@ -46,7 +46,7 @@ cd spotify-cmd
 ```bash
 bun install
 bun run build
-cp ./dist/main.js ~/.local/bin/spotify
+cp ./dist/spotify ~/.local/bin/spotify
 chmod +x ~/.local/bin/spotify
 ```
 
